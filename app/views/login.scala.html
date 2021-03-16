@@ -1,0 +1,23 @@
+@()(implicit request: RequestHeader, flash: Flash)
+
+@main("Login") {
+    <h3>Login</h3>
+
+    <form method="post" action="@routes.HomeController.validateLogin()">
+        @helper.CSRF.formField
+        Username: <input type="text" name="username"></input>
+        <br>
+        Password:  <input type="password" name="password"></input>
+        <input type="submit"></input>
+    </form>
+
+
+    <h3>Create User</h3>
+    <form method="post" action="@routes.HomeController.createUser()">
+        @helper.CSRF.formField
+        Username: <input type="text" name="username"></input>
+        <br>
+        Password:  <input type="password" name="password"></input>
+        <input type="submit"></input>
+    </form>
+}

@@ -1,0 +1,40 @@
+@import collection.mutable
+@(user: String, dms: mutable.ListBuffer[(String,String,String)], msgs: mutable.ListBuffer[(String,String)])(implicit request: RequestHeader, flash: Flash)
+
+@main("Message Board") {
+
+    <h1>@user's messages</h1>
+
+  <h2>Public Messages</h2>
+    <p>
+    @for(msg <- msgs){
+        <br>
+        @msg._1: @msg._2   
+    }
+    </p>
+    <form method="post" action="@routes.HomeController.sendPM()">
+        @helper.CSRF.formField
+        <input type="text" name="newPM"></input>
+        <input type="submit"></input>
+    </form>
+
+  <h2>Direct Messages</h2>
+  <p>
+    @for(dm <- dms){
+        <br>
+        @dm._2 to @dm._1: @dm._3   
+    }
+    </p>
+
+    <form method="post" action="@routes.HomeController.sendDM()">
+        @helper.CSRF.formField
+        <input type="text" name="DMRecipient"></input>
+        <input type="text" name="newDM"></input>
+        <input type="submit"></input>
+    </form>
+
+
+    <div>
+        <a href="@routes.HomeController.logout()">Logout</a>
+    </div>
+}
