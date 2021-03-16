@@ -14,7 +14,7 @@
     </p>
     <form method="post" action="@routes.HomeController.sendPM()">
         @helper.CSRF.formField
-        <input type="text" name="newPM"></input>
+        Message: <input type="text" name="newPM"></input>
         <input type="submit"></input>
     </form>
 
@@ -28,8 +28,8 @@
 
     <form method="post" action="@routes.HomeController.sendDM()">
         @helper.CSRF.formField
-        <input type="text" name="DMRecipient"></input>
-        <input type="text" name="newDM"></input>
+        Recipient: <input type="text" name="DMRecipient"></input>
+        Message: <input type="text" name="newDM"></input>
         <input type="submit"></input>
     </form>
 
