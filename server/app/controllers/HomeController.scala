@@ -28,6 +28,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     usernameOpt.map { username => 
     val user = username
     val dms = MessageBoardInMemoryModel.getDMs(username)
+    println("DDDDDDDDDD")
+    println(dms)
     val msgs = MessageBoardInMemoryModel.getPublicMessages()
     Ok(views.html.messageboard(user, dms, msgs))
     }.getOrElse(Redirect(routes.HomeController.login()))

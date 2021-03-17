@@ -98,3 +98,388 @@ class Application @Inject()(cc: ControllerComponents) extends AbstractController
 
 // }
 
+[0m2021.03.16 03:03:39 INFO  Started: Metals version 0.10.0 in workspace 'C:\Users\Chet\WebApps\messageboard' for client vscode 1.54.3.[0m
+[0m2021.03.16 03:03:40 INFO  time: initialize in 0.32s[0m
+[0m2021.03.16 03:03:44 INFO  Attempting to connect to the build server...[0m
+[0m2021.03.16 03:03:44 WARN  no build target for: C:\Users\Chet\WebApps\messageboard\server\app\models\MessageBoardInMemoryModel.scala[0m
+Starting the bsp launcher for bloop...
+Opening a bsp server connection with 'bsp --protocol tcp --port 27599'...
+Waiting for the bsp connection to come up...
+[0m[32m[D][0m Loading 0 projects from 'c:\Users\Chet\WebApps\messageboard\.bloop'...
+[0m[32m[D][0m Waiting for a connection at 127.0.0.1:27599...
+The server is listening for incoming connections at tcp://127.0.0.1:27599...
+Starting thread that pumps stdin and redirects it to the bsp server...
+Starting thread that pumps server stdout and redirects it to the client stdout...
+[0m2021.03.16 03:03:45 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at C:\Users\Chet\AppData\Local\scalameta\metals\cache\bsp.trace.json[0m
+[0m2021.03.16 03:03:45 INFO  time: Connected to build server in 0.91s[0m
+[0m2021.03.16 03:03:45 INFO  Connected to Build server: Bloop v1.4.8[0m
+[0m2021.03.16 03:03:46 INFO  no build target: using presentation compiler with only scala-library: 2.12.13[0m
+Mar 16, 2021 3:03:46 AM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 6
+[0m2021.03.16 03:03:47 ERROR Empty build targets. Expected at least one build target identifier.[0m
+[0m2021.03.16 03:03:47 ERROR Empty build targets. Expected at least one build target identifier.[0m
+[0m2021.03.16 03:03:47 ERROR Empty build targets. Expected at least one build target identifier.[0m
+package models
+
+import collection.mutable
+
+object MessageBoardInMemoryModel {
+    private val users = mutable.Map[String, String]("web" -> "apps", "mlewis" -> "prof")
+    private val publicMessages = mutable.ListBuffer[(String, String)]("web" -> "Wow this app is neat")
+    private val privateMessages = mutable.Map[String, mutable.ListBuffer[(String,String, String)]]("web" -> mutable.ListBuffer(("web", "mlewis", "This app is so good, I'm gonna give it 20 bonus points")), "mlewis" -> mutable.ListBuffer(("web", "mlewis", "This app is so good, I'm gonna give it 20 bonus points")))
+
+    def validateUser(username: String, password: String): Boolean = {
+        users.get(username).map(_==password).getOrElse(false)
+    }
+
+    def createUser(username: String, password: String): Boolean = {
+        if(users.contains(username)) false else {
+            users(username) = password
+            true
+        }
+    }
+
+    def userExists(username: String): Boolean = users.contains(username)
+
+    def getPublicMessages(): mutable.ListBuffer[(String,String)] = publicMessages
+
+    def getDMs(username: String): mutable.ListBuffer[(String,String,String)] = {
+        privateMessages.get(username).getOrElse(mutable.ListBuffer())
+    }
+
+    def addPM(username: String, msg: String): Unit = {
+        val x = (username, msg)
+        publicMessages += x
+    }
+
+    def addDM(to: String, from: String, msg: String): Unit = {
+        val x = (to, from, msg)
+        if(to != from) {
+            privateMessages(from) = privateMessages.get(from).getOrElse(mutable.ListBuffer()) :+ x
+        }
+        privateMessages(to) = privateMessages.get(to).getOrElse(mutable.ListBuffer()) :+ x
+    }
+
+}
+[0m2021.03.16 03:03:49 INFO  time: indexed workspace in 2.33s[0m
+[0m2021.03.16 03:03:49 INFO  no build target: using presentation compiler with only scala-library: 2.12.13[0m
+package models
+
+import collection.mutable
+
+object MessageBoardInMemoryModel {
+    private val users = mutable.Map[String, String]("web" -> "apps", "mlewis" -> "prof")
+    private val publicMessages = mutable.ListBuffer[(String, String)]("web" -> "Wow this app is neat")
+    private val privateMessages = mutable.Map[String, mutable.ListBuffer[(String,String, String)]]("web" -> mutable.ListBuffer(("web", "mlewis", "This app is so good, I'm gonna give it 20 bonus points")), "mlewis" -> mutable.ListBuffer(("web", "mlewis", "This app is so good, I'm gonna give it 20 bonus points")))
+
+    def validateUser(username: String, password: String): Boolean = {
+        users.get(username).map(_==password).getOrElse(false)
+    }
+
+    def createUser(username: String, password: String): Boolean = {
+        if(users.contains(username)) false else {
+            users(username) = password
+            true
+        }
+    }
+
+    def userExists(username: String): Boolean = users.contains(username)
+
+    def getPublicMessages(): mutable.ListBuffer[(String,String)] = publicMessages
+
+    def getDMs(username: String): mutable.ListBuffer[(String,String,String)] = {
+        privateMessages.get(username).getOrElse(mutable.ListBuffer())
+    }
+
+    def addPM(username: String, msg: String): Unit = {
+        val x = (username, msg)
+        publicMessages += x
+    }
+
+    def addDM(to: String, from: String, msg: String): Unit = {
+        val x = (to, from, msg)
+        if(to != from) {
+            privateMessages(from) = privateMessages.get(from).getOrElse(mutable.ListBuffer()) :+ x
+        }
+        privateMessages(to) = privateMessages.get(to).getOrElse(mutable.ListBuffer()) :+ x
+    }
+
+}
+package models
+
+import collection.mutable
+
+object MessageBoardInMemoryModel {
+    private val users = mutable.Map[String, String]("web" -> "apps", "mlewis" -> "prof")
+    private val publicMessages = mutable.ListBuffer[(String, String)]("web" -> "Wow this app is neat")
+    private val privateMessages = mutable.Map[String, mutable.ListBuffer[(String,String, String)]]("web" -> mutable.ListBuffer(("web", "mlewis", "This app is so good, I'm gonna give it 20 bonus points")), "mlewis" -> mutable.ListBuffer(("web", "mlewis", "This app is so good, I'm gonna give it 20 bonus points")))
+
+    def validateUser(username: String, password: String): Boolean = {
+        users.get(username).map(_==password).getOrElse(false)
+    }
+
+    def createUser(username: String, password: String): Boolean = {
+        if(users.contains(username)) false else {
+            users(username) = password
+            true
+        }
+    }
+
+    def userExists(username: String): Boolean = users.contains(username)
+
+    def getPublicMessages(): mutable.ListBuffer[(String,String)] = publicMessages
+
+    def getDMs(username: String): mutable.ListBuffer[(String,String,String)] = {
+        privateMessages.get(username).getOrElse(mutable.ListBuffer())
+    }
+
+    def addPM(username: String, msg: String): Unit = {
+        val x = (username, msg)
+        publicMessages += x
+    }
+
+    def addDM(to: String, from: String, msg: String): Unit = {
+        val x = (to, from, msg)
+        if(to != from) {
+            privateMessages(from) = privateMessages.get(from).getOrElse(mutable.ListBuffer()) :+ x
+        }
+        privateMessages(to) = privateMessages.get(to).getOrElse(mutable.ListBuffer()) :+ x
+    }
+
+}
+[0m2021.03.16 03:03:49 INFO  time: code lens generation in 4.82s[0m
+[0m2021.03.16 03:03:49 INFO  time: code lens generation in 4.86s[0m
+[0m2021.03.16 03:14:29 INFO  shutting down Metals[0m
+[0m2021.03.16 03:14:29 INFO  Shut down connection with build server.[0m
+No more data in the client stdin, exiting...
+No more data in the server stdin, exiting...
+[0m2021.03.16 12:00:01 INFO  Started: Metals version 0.10.0 in workspace 'C:\Users\Chet\WebApps\messageboard' for client vscode 1.54.3.[0m
+[0m2021.03.16 12:00:01 INFO  time: initialize in 0.31s[0m
+[0m2021.03.16 12:00:01 INFO  Attempting to connect to the build server...[0m
+[0m2021.03.16 12:00:01 WARN  no build target for: C:\Users\Chet\WebApps\messageboard\server\app\controllers\HomeController.scala[0m
+[0m2021.03.16 12:00:02 INFO  skipping build import with status 'Requested'[0m
+Starting the bsp launcher for bloop...
+Opening a bsp server connection with 'bsp --protocol tcp --port 12257'...
+Waiting for the bsp connection to come up...
+[0m[32m[D][0m Waiting for a connection at 127.0.0.1:12257...
+The server is listening for incoming connections at tcp://127.0.0.1:12257...
+Starting thread that pumps stdin and redirects it to the bsp server...
+Starting thread that pumps server stdout and redirects it to the client stdout...
+[0m2021.03.16 12:00:02 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at C:\Users\Chet\AppData\Local\scalameta\metals\cache\bsp.trace.json[0m
+[0m2021.03.16 12:00:02 INFO  time: Connected to build server in 0.97s[0m
+[0m2021.03.16 12:00:02 INFO  Connected to Build server: Bloop v1.4.8[0m
+[0m2021.03.16 12:00:03 INFO  no build target: using presentation compiler with only scala-library: 2.12.13[0m
+[0m2021.03.16 12:00:03 ERROR Empty build targets. Expected at least one build target identifier.[0m
+[0m2021.03.16 12:00:03 ERROR Empty build targets. Expected at least one build target identifier.[0m
+[0m2021.03.16 12:00:03 ERROR Empty build targets. Expected at least one build target identifier.[0m
+package controllers
+
+import javax.inject._
+import play.api._
+import play.api.mvc._
+import models.MessageBoardInMemoryModel
+
+/**
+ * This controller creates an `Action` to handle HTTP requests to the
+ * application's home page.
+ */
+@Singleton
+class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+
+  /**
+   * Create an Action to render an HTML page.
+   *
+   * The configuration in the `routes` file means that this method
+   * will be called when the application receives a `GET` request with
+   * a path of `/`.
+   */
+  def index() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.index())
+  }
+
+  def messageBoard = Action { implicit request =>
+    val usernameOpt = request.session.get("username")
+    usernameOpt.map { username => 
+    val user = username
+    val dms = MessageBoardInMemoryModel.getDMs(username)
+    val msgs = MessageBoardInMemoryModel.getPublicMessages()
+    Ok(views.html.messageboard(user, dms, msgs))
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def login = Action { implicit request =>
+    Ok(views.html.login()).withNewSession
+  }
+
+  def sendPM = Action { implicit request =>
+    val usernameOpt = request.session.get("username")
+    usernameOpt.map { username =>
+    val postVals = request.body.asFormUrlEncoded
+      postVals.map { args => 
+        val msg = args("newPM").head
+        MessageBoardInMemoryModel.addPM(username, msg)
+        Redirect(routes.HomeController.messageBoard())
+      }.getOrElse(Redirect(routes.HomeController.messageBoard()))
+    }.getOrElse(Redirect(routes.HomeController.login()))
+
+  }
+
+  def sendDM = Action { implicit request =>
+    val usernameOpt = request.session.get("username")
+    usernameOpt.map { username =>
+    val postVals = request.body.asFormUrlEncoded
+      postVals.map { args => 
+        val msg = args("newDM").head
+        val to = args("DMRecipient").head
+        if(MessageBoardInMemoryModel.userExists(to)){
+        MessageBoardInMemoryModel.addDM(to, username, msg)
+        Redirect(routes.HomeController.messageBoard())
+        } else {
+          Redirect(routes.HomeController.messageBoard()).flashing("error"->"Recipient does not exist")
+        }
+      }.getOrElse(Redirect(routes.HomeController.messageBoard()))
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def createUser = Action { implicit request =>
+    val postVals = request.body.asFormUrlEncoded
+    postVals.map { args =>
+      val username = args("username").head
+      val password = args("password").head
+      if (MessageBoardInMemoryModel.createUser(username,password)){
+        Redirect(routes.HomeController.messageBoard()).withSession("username" -> username)
+      } else {
+        Redirect(routes.HomeController.login()).flashing("error"->"Username is taken")
+      }
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def validateLogin = Action { implicit request =>
+    val postVals = request.body.asFormUrlEncoded
+    postVals.map { args =>
+      val username = args("username").head
+      val password = args("password").head
+      if (MessageBoardInMemoryModel.validateUser(username,password)){
+        Redirect(routes.HomeController.messageBoard()).withSession("username" -> username)
+      } else {
+        Redirect(routes.HomeController.login()).flashing("error"->"Invalid username/password combination")
+      }
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def logout = Action {
+    Redirect(routes.HomeController.login()).withNewSession
+  }
+}
+
+[0m2021.03.16 12:00:05 INFO  time: indexed workspace in 1.83s[0m
+[0m2021.03.16 12:00:05 WARN  no build target for: C:\Users\Chet\WebApps\messageboard\server\app\controllers\HomeController.scala[0m
+[0m2021.03.16 12:00:05 INFO  no build target: using presentation compiler with only scala-library: 2.12.13[0m
+package controllers
+
+import javax.inject._
+import play.api._
+import play.api.mvc._
+import models.MessageBoardInMemoryModel
+
+/**
+ * This controller creates an `Action` to handle HTTP requests to the
+ * application's home page.
+ */
+@Singleton
+class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+
+  /**
+   * Create an Action to render an HTML page.
+   *
+   * The configuration in the `routes` file means that this method
+   * will be called when the application receives a `GET` request with
+   * a path of `/`.
+   */
+  def index() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.index())
+  }
+
+  def messageBoard = Action { implicit request =>
+    val usernameOpt = request.session.get("username")
+    usernameOpt.map { username => 
+    val user = username
+    val dms = MessageBoardInMemoryModel.getDMs(username)
+    val msgs = MessageBoardInMemoryModel.getPublicMessages()
+    Ok(views.html.messageboard(user, dms, msgs))
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def login = Action { implicit request =>
+    Ok(views.html.login()).withNewSession
+  }
+
+  def sendPM = Action { implicit request =>
+    val usernameOpt = request.session.get("username")
+    usernameOpt.map { username =>
+    val postVals = request.body.asFormUrlEncoded
+      postVals.map { args => 
+        val msg = args("newPM").head
+        MessageBoardInMemoryModel.addPM(username, msg)
+        Redirect(routes.HomeController.messageBoard())
+      }.getOrElse(Redirect(routes.HomeController.messageBoard()))
+    }.getOrElse(Redirect(routes.HomeController.login()))
+
+  }
+
+  def sendDM = Action { implicit request =>
+    val usernameOpt = request.session.get("username")
+    usernameOpt.map { username =>
+    val postVals = request.body.asFormUrlEncoded
+      postVals.map { args => 
+        val msg = args("newDM").head
+        val to = args("DMRecipient").head
+        if(MessageBoardInMemoryModel.userExists(to)){
+        MessageBoardInMemoryModel.addDM(to, username, msg)
+        Redirect(routes.HomeController.messageBoard())
+        } else {
+          Redirect(routes.HomeController.messageBoard()).flashing("error"->"Recipient does not exist")
+        }
+      }.getOrElse(Redirect(routes.HomeController.messageBoard()))
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def createUser = Action { implicit request =>
+    val postVals = request.body.asFormUrlEncoded
+    postVals.map { args =>
+      val username = args("username").head
+      val password = args("password").head
+      if (MessageBoardInMemoryModel.createUser(username,password)){
+        Redirect(routes.HomeController.messageBoard()).withSession("username" -> username)
+      } else {
+        Redirect(routes.HomeController.login()).flashing("error"->"Username is taken")
+      }
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def validateLogin = Action { implicit request =>
+    val postVals = request.body.asFormUrlEncoded
+    postVals.map { args =>
+      val username = args("username").head
+      val password = args("password").head
+      if (MessageBoardInMemoryModel.validateUser(username,password)){
+        Redirect(routes.HomeController.messageBoard()).withSession("username" -> username)
+      } else {
+        Redirect(routes.HomeController.login()).flashing("error"->"Invalid username/password combination")
+      }
+    }.getOrElse(Redirect(routes.HomeController.login()))
+  }
+
+  def logout = Action {
+    Redirect(routes.HomeController.login()).withNewSession
+  }
+}
+
+[0m2021.03.16 12:00:05 INFO  time: code lens generation in 3.89s[0m
+[0m2021.03.16 12:00:05 INFO  time: code lens generation in 3.85s[0m
+Mar 16, 2021 12:11:00 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 72
+[0m2021.03.16 12:35:19 INFO  shutting down Metals[0m
+[0m2021.03.16 12:35:19 INFO  Shut down connection with build server.[0m
+No more data in the client stdin, exiting...
+No more data in the server stdin, exiting...

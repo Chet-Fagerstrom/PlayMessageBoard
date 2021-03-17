@@ -1,5 +1,4 @@
-@import collection.mutable
-@(user: String, dms: mutable.ListBuffer[(String,String,String)], msgs: mutable.ListBuffer[(String,String)])(implicit request: RequestHeader, flash: Flash)
+@(user: String, dms: Seq[(String,String,String)], msgs: Seq[(String,String)])(implicit request: RequestHeader, flash: Flash)
 
 @main("Message Board") {
 
